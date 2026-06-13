@@ -4,7 +4,7 @@ class ClaudeMonitor < Formula
   desc "macOS menu-bar app to monitor Claude CLI token usage and cost"
   homepage "https://github.com/KarthikRepo/claude-monitor"
   license "MIT"
-  version "1.3.2"
+  version "1.3.3"
 
   # Tiny stable PyPI wheel used as a version anchor only — content is ignored.
   # Python sources are written from heredocs below (private tap, no public URL).
@@ -261,10 +261,10 @@ def fmt_tok(n: int) -> str:
     return str(n)
 
 def fmt_cost(c: float) -> str:
-    if c >= 1000: return f"${c/1000:.1f}K"
-    if c >= 100:  return f"${c:.0f}"
-    if c >= 10:   return f"${c:.1f}"
-    return f"${c:.2f}"
+    n = int(round(c))
+    if n >= 1_000_000: return f"${n / 1_000_000:.1f}M".replace('.0M', 'M')
+    if n >= 100_000:   return f"${n // 1_000}K"
+    return f"${n:,}"
 
 def next_reset_label() -> str:
     now = datetime.now()
@@ -616,7 +616,7 @@ class WidgetView(NSView):
             _txt(s['time'], W-P-64, 9, 64, 20, _sans(11), C_DIM, NSTextAlignmentRight)
 
         # ── Token table (y=35..145) ──
-        CX = [P, 142, 204, 263]
+        CX = [P, 130, 195, 252]
         CW = [CX[1]-P-4, CX[2]-CX[1]-2, CX[3]-CX[2]-2, W-CX[3]-P]
         for i, txt in enumerate(('Input', 'Output', 'Cost')):
             _txt(txt, CX[i+1], 124, CW[i+1], 18,
