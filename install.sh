@@ -57,12 +57,8 @@ PYPI="--index-url https://pypi.org/simple/"
 "$VENV/bin/pip" install --quiet $PYPI 'rumps==0.4.0'
 
 # ── Create launcher ──────────────────────────────────────────────────────────
-# Prefer brew bin, fall back to ~/.local/bin if not writable
-BIN_DIR="$(brew --prefix 2>/dev/null)/bin"
-if [ ! -w "$BIN_DIR" ] 2>/dev/null; then
-  BIN_DIR="$HOME/.local/bin"
-  mkdir -p "$BIN_DIR"
-fi
+BIN_DIR="$HOME/.local/bin"
+mkdir -p "$BIN_DIR"
 LAUNCHER="$BIN_DIR/claude-monitor"
 
 cat > "$LAUNCHER" <<LAUNCH_EOF
