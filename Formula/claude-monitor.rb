@@ -51,12 +51,14 @@ class ClaudeMonitor < Formula
     # Wrapper script: launch the menu bar app in background
     (bin/"claude-monitor").write <<~EOS
       #!/bin/bash
-      # Re-use an existing instance if already running
       if pgrep -f "claude_monitor/menubar.py" > /dev/null 2>&1; then
         echo "Claude Monitor is already running — look for ◆ in your menu bar."
         exit 0
       fi
-      exec "#{libexec}/bin/python3.12" "#{libexec}/share/claude_monitor/menubar.py" "$@"
+      nohup "#{libexec}/bin/python3.12" "#{libexec}/share/claude_monitor/menubar.py" "$@" \
+        > /tmp/claude_monitor.log 2>&1 &
+      disown
+      echo "Claude Monitor started — look for ◆ in your menu bar."
     EOS
   end
 
