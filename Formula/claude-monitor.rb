@@ -4,7 +4,7 @@ class ClaudeMonitor < Formula
   desc "macOS menu-bar app to monitor Claude CLI token usage and cost"
   homepage "https://github.com/KarthikRepo/claude-monitor"
   license "MIT"
-  version "1.3.0"
+  version "1.3.1"
 
   # Tiny stable PyPI wheel used as a version anchor only — content is ignored.
   # Python sources are written from heredocs below (private tap, no public URL).
@@ -354,12 +354,8 @@ class MonitorApp(rumps.App):
         self._widget.setup()
         self._widget.view._hide_callback = self._on_widget_hidden
 
-        cfg = load_config()
-        if cfg.get('widget_visible', True):
-            self._widget.show()
-            self.show_item.title = 'Hide Widget'
-        else:
-            self.show_item.title = 'Show Widget'
+        self._widget.show()
+        self.show_item.title = 'Hide Widget'
 
         self.refresh()
         self._timer = rumps.Timer(self.refresh, REFRESH_SEC)
