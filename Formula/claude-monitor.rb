@@ -2,7 +2,7 @@ class ClaudeMonitor < Formula
   include Language::Python::Virtualenv
 
   desc "macOS menu-bar app to monitor Claude CLI token usage and cost"
-  homepage "https://github.com/karthik_seq/claude-monitor"
+  homepage "https://github.com/KarthikRepo/claude-monitor"
   license "MIT"
   version "1.3.0"
 
