@@ -6,7 +6,7 @@ class ClaudeMonitor < Formula
   license "MIT"
 
   url "https://github.com/karthik_seq/claude-monitor/archive/refs/tags/v1.3.0.tar.gz"
-  sha256 "0d99b8e3e11faaf651e8ece8b398044607b2546f5d5248e71bade2d227075e26"
+  sha256 "a1ca756e64d17cb895414ccf2caf9dcdbc5acbab40232808220946fb2cb61997"
   version "1.3.0"
 
   depends_on "python@3.12"
