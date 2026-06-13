@@ -11,7 +11,19 @@ SRC_DIR="$SCRIPT_DIR/sources"
 
 # ── Find Python 3.10+ ────────────────────────────────────────────────────────
 find_python() {
-  for py in python3.13 python3.12 python3.11 python3.10 python3; do
+  # Prefer Homebrew Python (full PyPI access) over Anaconda/system Python
+  local candidates=(
+    /opt/homebrew/bin/python3.13
+    /opt/homebrew/bin/python3.12
+    /opt/homebrew/bin/python3.11
+    /opt/homebrew/bin/python3.10
+    /usr/local/bin/python3.13
+    /usr/local/bin/python3.12
+    /usr/local/bin/python3.11
+    /usr/local/bin/python3.10
+    python3.13 python3.12 python3.11 python3.10 python3
+  )
+  for py in "${candidates[@]}"; do
     local cmd
     cmd=$(command -v "$py" 2>/dev/null) || continue
     "$cmd" -c "import sys; assert sys.version_info >= (3,10), 'too old'" 2>/dev/null || continue
