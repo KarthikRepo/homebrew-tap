@@ -36,7 +36,7 @@ class ClaudeMonitor < Formula
       cached = resource(r).cached_download
       wheel  = buildpath/cached.basename.to_s.sub(/\A[0-9a-f]+-+/, "")
       cp cached, wheel
-      system pip, "install", "--no-deps", "--no-index", wheel
+      system pip, "install", "--no-deps", "--no-index", "--break-system-packages", wheel
     end
     # rumps is a pure-Python source tarball — stage normally
     venv.pip_install resource("rumps")
