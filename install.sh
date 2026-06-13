@@ -40,10 +40,8 @@ if [ ! -d "$VENV" ]; then
   "$PYTHON" -m venv "$VENV"
 fi
 "$VENV/bin/pip" install --quiet --upgrade pip
-"$VENV/bin/pip" install --quiet \
-  --only-binary ':all:' \
-  'pyobjc-framework-Cocoa==12.2' \
-  'rumps==0.4.0'
+"$VENV/bin/pip" install --quiet --only-binary ':all:' 'pyobjc-framework-Cocoa==12.2'
+"$VENV/bin/pip" install --quiet 'rumps==0.4.0'
 
 # ── Create launcher ──────────────────────────────────────────────────────────
 # Put launcher in /usr/local/bin or $(brew --prefix)/bin, whichever exists
