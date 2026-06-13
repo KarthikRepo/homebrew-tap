@@ -4,7 +4,7 @@ class ClaudeMonitor < Formula
   desc "macOS menu-bar app to monitor Claude CLI token usage and cost"
   homepage "https://github.com/karthik_seq/claude-monitor"
   url "https://github.com/karthik_seq/claude-monitor/releases/download/v1.1.0/claude-monitor-1.1.0.tar.gz"
-  sha256 "8408e12eaf4e4c8a45d114251c00cb30e4f12efe46808c37462977da3d6d7e6e"
+  sha256 "116e145daef8906d1fc1897e9100bbdd23dbad7aac2c2d3b72886436ba9086df"
   license "MIT"
   head "https://github.com/karthik_seq/claude-monitor.git", branch: "main"
 
