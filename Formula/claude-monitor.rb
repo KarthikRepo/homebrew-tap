@@ -4,10 +4,12 @@ class ClaudeMonitor < Formula
   desc "macOS menu-bar app to monitor Claude CLI token usage and cost"
   homepage "https://github.com/karthik_seq/claude-monitor"
   license "MIT"
-
-  url "https://github.com/karthik_seq/claude-monitor/releases/download/v1.3.0/claude-monitor-1.3.0.tar.gz"
-  sha256 "c937e7c695450f02f389a5f276f74704c60a9f5b09c6c552a0f58166ad10a2ef"
   version "1.3.0"
+
+  # Minimal version-marker tarball committed to the tap repo — stable hash guaranteed.
+  # Actual Python sources are installed from tap's sources/ directory below.
+  url "https://raw.githubusercontent.com/karthik_seq/homebrew-tap/main/dist/claude-monitor-version-1.3.0.tar.gz"
+  sha256 "a77bd23fb403032ec5b9dbf5cb3c21ccf7ab93a71296161ac7aebb5e76dae357"
 
   depends_on "python@3.12"
   depends_on :macos
@@ -32,25 +34,20 @@ class ClaudeMonitor < Formula
     python = Formula["python@3.12"].opt_bin/"python3.12"
     venv = virtualenv_create(libexec, python)
 
-    # Homebrew caches wheels with a hash prefix (e.g. "abc123--pyobjc_core-...whl").
-    # pip rejects the non-standard filename, so copy to buildpath with the real name first.
-    # We use `python -m pip --python=venv_python` (Homebrew's own internal pattern)
-    # rather than calling the venv's pip3 directly, to avoid PEP 668 in system-site-packages venvs.
     %w[pyobjc-core pyobjc-framework-Cocoa].each do |r|
       cached = resource(r).cached_download
       wheel  = buildpath/cached.basename.to_s.sub(/\A[0-9a-f]+-+/, "")
       cp cached, wheel
       system python, "-m", "pip", "--python=#{libexec}/bin/python", "install", "--no-deps", "--no-index", wheel
     end
-    # rumps is a pure-Python source tarball — stage normally
     venv.pip_install resource("rumps")
 
-    # buildpath = root of the cloned git repo — always correct for --HEAD installs
-    (libexec/"share/claude_monitor").install buildpath/"monitor_core.py",
-                                              buildpath/"menubar.py",
-                                              buildpath/"widget.py"
+    # Install Python sources from the tap's sources/ directory (avoids GitHub CDN instability)
+    src = Pathname.new(__dir__).parent/"sources"
+    (libexec/"share/claude_monitor").install src/"monitor_core.py",
+                                              src/"menubar.py",
+                                              src/"widget.py"
 
-    # Wrapper script: launch the menu bar app in background
     (bin/"claude-monitor").write <<~EOS
       #!/bin/bash
       if pgrep -f "claude_monitor/menubar.py" > /dev/null 2>&1; then
@@ -80,7 +77,6 @@ class ClaudeMonitor < Formula
   end
 
   test do
-    # Smoke-test: core module imports cleanly without a display
     system Formula["python@3.12"].opt_bin/"python3.12", "-c",
            "import sys; sys.path.insert(0,'#{libexec}/share/claude_monitor'); import monitor_core"
   end
