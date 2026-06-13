@@ -57,11 +57,10 @@ PYPI="--index-url https://pypi.org/simple/"
 "$VENV/bin/pip" install --quiet $PYPI 'rumps==0.4.0'
 
 # ── Create launcher ──────────────────────────────────────────────────────────
-# Put launcher in /usr/local/bin or $(brew --prefix)/bin, whichever exists
-if command -v brew &>/dev/null; then
-  BIN_DIR="$(brew --prefix)/bin"
-else
-  BIN_DIR="/usr/local/bin"
+# Prefer brew bin, fall back to ~/.local/bin if not writable
+BIN_DIR="$(brew --prefix 2>/dev/null)/bin"
+if [ ! -w "$BIN_DIR" ] 2>/dev/null; then
+  BIN_DIR="$HOME/.local/bin"
   mkdir -p "$BIN_DIR"
 fi
 LAUNCHER="$BIN_DIR/claude-monitor"
@@ -83,3 +82,11 @@ echo "Launcher: $LAUNCHER"
 echo ""
 echo "Run:  claude-monitor"
 echo "Logs: /tmp/claude_monitor.log"
+
+# Warn if the bin dir isn't on PATH
+if ! echo "$PATH" | tr ':' '\n' | grep -qx "$BIN_DIR"; then
+  echo ""
+  echo "NOTE: $BIN_DIR is not on your PATH."
+  echo "Add this to ~/.zshrc (or ~/.bashrc):"
+  echo "  export PATH=\"$BIN_DIR:\$PATH\""
+fi
