@@ -129,7 +129,7 @@ class WidgetView(NSView):
             _txt(s['time'], W-P-64, 9, 64, 20, _sans(11), C_DIM, NSTextAlignmentRight)
 
         # ── Token table (y=35..145) ──
-        CX = [P, 142, 204, 263]
+        CX = [P, 130, 195, 252]
         CW = [CX[1]-P-4, CX[2]-CX[1]-2, CX[3]-CX[2]-2, W-CX[3]-P]
         for i, txt in enumerate(('Input', 'Output', 'Cost')):
             _txt(txt, CX[i+1], 124, CW[i+1], 18,
@@ -185,8 +185,9 @@ class WidgetView(NSView):
     def _draw_tooltip(self):
         if not self._top_sessions:
             return
-        rh = 26
-        th = 28 + len(self._top_sessions) * rh + 6
+        sessions = self._top_sessions[:3]  # cap at 3 rows to stay within token table area
+        rh = 22
+        th = 26 + len(sessions) * rh + 6
         tw = W - 2*P
         tx, ty = P, 36
 
@@ -202,11 +203,11 @@ class WidgetView(NSView):
         path.setLineWidth_(1.0)
         path.stroke()
 
-        _txt('Top conversations this month', tx+10, ty+th-24, tw-20, 20,
+        _txt('Top conversations this month', tx+10, ty+th-22, tw-20, 18,
              _sans(11, bold=True), C_WHT)
 
-        for i, sess in enumerate(self._top_sessions):
-            ry = ty + th - 28 - (i + 1) * rh
+        for i, sess in enumerate(sessions):
+            ry = ty + th - 26 - (i + 1) * rh
             name = (sess['name'][:28] + '…') if len(sess['name']) > 28 else sess['name']
             _txt(f"{i+1}.  {name}", tx+10, ry, tw-80, 22, _sans(11), C_WHT)
             _txt(fmt_cost(sess['cost']), tx+tw-72, ry, 62, 22,

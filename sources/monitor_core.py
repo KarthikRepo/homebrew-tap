@@ -213,10 +213,10 @@ def fmt_tok(n: int) -> str:
     return str(n)
 
 def fmt_cost(c: float) -> str:
-    if c >= 1000: return f"${c/1000:.1f}K"
-    if c >= 100:  return f"${c:.0f}"
-    if c >= 10:   return f"${c:.1f}"
-    return f"${c:.2f}"
+    n = int(round(c))
+    if n >= 1_000_000: return f"${n / 1_000_000:.1f}M".replace('.0M', 'M')
+    if n >= 100_000:   return f"${n // 1_000}K"
+    return f"${n:,}"
 
 def next_reset_label() -> str:
     now = datetime.now()

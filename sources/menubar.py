@@ -79,12 +79,8 @@ class MonitorApp(rumps.App):
         self._widget.setup()
         self._widget.view._hide_callback = self._on_widget_hidden
 
-        cfg = load_config()
-        if cfg.get('widget_visible', True):
-            self._widget.show()
-            self.show_item.title = 'Hide Widget'
-        else:
-            self.show_item.title = 'Show Widget'
+        self._widget.show()
+        self.show_item.title = 'Hide Widget'
 
         self.refresh()
         self._timer = rumps.Timer(self.refresh, REFRESH_SEC)
