@@ -5,6 +5,10 @@ class ClaudeMonitor < Formula
   homepage "https://github.com/karthik_seq/claude-monitor"
   license "MIT"
 
+  url "https://github.com/karthik_seq/claude-monitor/archive/refs/tags/v1.2.0.tar.gz"
+  sha256 "dd6a53dcc54c2b34ffc381583fd8e8f1e14261d8decc4ade98950a2f386dd4bb"
+  version "1.2.0"
+
   head "https://github.com/karthik_seq/claude-monitor.git", branch: "main"
 
   depends_on "python@3.12"
