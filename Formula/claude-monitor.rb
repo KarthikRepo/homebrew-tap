@@ -30,13 +30,15 @@ class ClaudeMonitor < Formula
     venv = virtualenv_create(libexec, Formula["python@3.12"].opt_bin/"python3.12")
     pip = libexec/"bin/pip3"
 
-    # .whl files must be passed directly to pip — resource staging extracts them
-    # as directories which pip can't install. Use cached_download for wheels.
+    # Homebrew caches wheels with a hash prefix (e.g. "abc123--pyobjc_core-...whl").
+    # pip rejects the non-standard filename, so copy to buildpath with the real name first.
     %w[pyobjc-core pyobjc-framework-Cocoa].each do |r|
-      system pip, "install", "--no-deps", "--no-index",
-             resource(r).cached_download
+      cached = resource(r).cached_download
+      wheel  = buildpath/cached.basename.to_s.sub(/\A[0-9a-f]+-+/, "")
+      cp cached, wheel
+      system pip, "install", "--no-deps", "--no-index", wheel
     end
-    # rumps is a source tarball — stage normally
+    # rumps is a pure-Python source tarball — stage normally
     venv.pip_install resource("rumps")
 
     # buildpath = root of the cloned git repo — always correct for --HEAD installs
