@@ -3,9 +3,8 @@ class ClaudeMonitor < Formula
 
   desc "macOS menu-bar app to monitor Claude CLI token usage and cost"
   homepage "https://github.com/karthik_seq/claude-monitor"
-  url "https://github.com/karthik_seq/claude-monitor/releases/download/v1.1.0/claude-monitor-1.1.0.tar.gz"
-  sha256 "116e145daef8906d1fc1897e9100bbdd23dbad7aac2c2d3b72886436ba9086df"
   license "MIT"
+
   head "https://github.com/karthik_seq/claude-monitor.git", branch: "main"
 
   depends_on "python@3.12"
@@ -35,8 +34,10 @@ class ClaudeMonitor < Formula
       venv.pip_install resource(r)
     end
 
-    # Install app source files
-    (libexec/"share/claude_monitor").install "monitor_core.py", "menubar.py", "widget.py"
+    # buildpath = root of the cloned git repo — always correct for --HEAD installs
+    (libexec/"share/claude_monitor").install buildpath/"monitor_core.py",
+                                              buildpath/"menubar.py",
+                                              buildpath/"widget.py"
 
     # Wrapper script: launch the menu bar app in background
     (bin/"claude-monitor").write <<~EOS
