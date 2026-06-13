@@ -8,7 +8,6 @@ class ClaudeMonitor < Formula
   head "https://github.com/karthik_seq/claude-monitor.git", branch: "main"
 
   depends_on "python@3.12"
-  depends_on "python-tk@3.12"
   depends_on :macos
 
   # pyobjc-core must be installed before pyobjc-framework-Cocoa and rumps
