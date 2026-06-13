@@ -27,16 +27,18 @@ class ClaudeMonitor < Formula
   end
 
   def install
-    venv = virtualenv_create(libexec, Formula["python@3.12"].opt_bin/"python3.12")
-    pip = libexec/"bin/pip3"
+    python = Formula["python@3.12"].opt_bin/"python3.12"
+    venv = virtualenv_create(libexec, python)
 
     # Homebrew caches wheels with a hash prefix (e.g. "abc123--pyobjc_core-...whl").
     # pip rejects the non-standard filename, so copy to buildpath with the real name first.
+    # We use `python -m pip --python=venv_python` (Homebrew's own internal pattern)
+    # rather than calling the venv's pip3 directly, to avoid PEP 668 in system-site-packages venvs.
     %w[pyobjc-core pyobjc-framework-Cocoa].each do |r|
       cached = resource(r).cached_download
       wheel  = buildpath/cached.basename.to_s.sub(/\A[0-9a-f]+-+/, "")
       cp cached, wheel
-      system pip, "install", "--no-deps", "--no-index", "--break-system-packages", wheel
+      system python, "-m", "pip", "--python=#{libexec}/bin/python", "install", "--no-deps", "--no-index", wheel
     end
     # rumps is a pure-Python source tarball — stage normally
     venv.pip_install resource("rumps")
