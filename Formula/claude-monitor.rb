@@ -5,11 +5,9 @@ class ClaudeMonitor < Formula
   homepage "https://github.com/karthik_seq/claude-monitor"
   license "MIT"
 
-  url "https://github.com/karthik_seq/claude-monitor/archive/refs/tags/v1.2.0.tar.gz"
-  sha256 "dd6a53dcc54c2b34ffc381583fd8e8f1e14261d8decc4ade98950a2f386dd4bb"
-  version "1.2.0"
-
-  head "https://github.com/karthik_seq/claude-monitor.git", branch: "main"
+  url "https://github.com/karthik_seq/claude-monitor/archive/refs/tags/v1.3.0.tar.gz"
+  sha256 "0d99b8e3e11faaf651e8ece8b398044607b2546f5d5248e71bade2d227075e26"
+  version "1.3.0"
 
   depends_on "python@3.12"
   depends_on :macos
