@@ -28,10 +28,16 @@ class ClaudeMonitor < Formula
 
   def install
     venv = virtualenv_create(libexec, Formula["python@3.12"].opt_bin/"python3.12")
-    # Install in dependency order: pyobjc-core → pyobjc-framework-Cocoa → rumps
-    %w[pyobjc-core pyobjc-framework-Cocoa rumps].each do |r|
-      venv.pip_install resource(r)
+    pip = libexec/"bin/pip3"
+
+    # .whl files must be passed directly to pip — resource staging extracts them
+    # as directories which pip can't install. Use cached_download for wheels.
+    %w[pyobjc-core pyobjc-framework-Cocoa].each do |r|
+      system pip, "install", "--no-deps", "--no-index",
+             resource(r).cached_download
     end
+    # rumps is a source tarball — stage normally
+    venv.pip_install resource("rumps")
 
     # buildpath = root of the cloned git repo — always correct for --HEAD installs
     (libexec/"share/claude_monitor").install buildpath/"monitor_core.py",
